@@ -55,6 +55,10 @@ export default async function CustomersTable({
                         <p className="text-xs">Paid</p>
                         <p className="font-medium">{customer.total_paid}</p>
                       </div>
+                      <div className="flex w-1/2 flex-col">
+                        <p className="text-xs">Paid</p>
+                        <p className="font-medium">{customer.total_overdue}</p>
+                      </div>
                     </div>
                     <div className="pt-4 text-sm">
                       <p>{customer.total_invoices} invoices</p>
@@ -79,6 +83,9 @@ export default async function CustomersTable({
                     </th>
                     <th scope="col" className="px-4 py-5 font-medium">
                       Total Paid
+                    </th>
+                    <th scope="col" className="px-4 py-5 font-medium">
+                      Total Overdue
                     </th>
                   </tr>
                 </thead>
@@ -109,6 +116,9 @@ export default async function CustomersTable({
                       </td>
                       <td className="whitespace-nowrap bg-white px-4 py-5 text-sm group-first-of-type:rounded-md group-last-of-type:rounded-md">
                         {customer.total_paid}
+                      </td>
+                      <td className="whitespace-nowrap bg-white px-4 py-5 text-sm group-first-of-type:rounded-md group-last-of-type:rounded-md">
+                        {customer.total_overdue}
                       </td>
                     </tr>
                   ))}

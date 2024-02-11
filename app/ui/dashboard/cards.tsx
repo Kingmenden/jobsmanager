@@ -10,6 +10,7 @@ const iconMap = {
   collected: BanknotesIcon,
   customers: UserGroupIcon,
   pending: ClockIcon,
+  overdue: ClockIcon,
   invoices: InboxIcon,
 };
 
@@ -37,7 +38,7 @@ export function Card({
 }: {
   title: string;
   value: number | string;
-  type: 'invoices' | 'customers' | 'pending' | 'collected';
+  type: 'invoices' | 'customers' | 'pending' | 'collected' | 'overdue';
 }) {
   const Icon = iconMap[type];
 
