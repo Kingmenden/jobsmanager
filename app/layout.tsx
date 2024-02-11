@@ -6,9 +6,11 @@ export default function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
-  return (
-    <html lang="en">
-      <body className={`${inter.className} antialiased`}>{children}</body>
-    </html>
-  );
+  //return statemnt to start, uncomment and comment the far below when ready
+  //return (
+  //  <html lang="en">
+  //    <body className={`${inter.className} antialiased`}>{children}</body>
+  //  </html>
+  //);
+  return (<div>Under maintenance</div>)
 }
