@@ -184,10 +184,13 @@ export async function createUser(prevState: UserState, formData: FormData) {
   const { firstname, lastname, profile, email, password } = validatedFields.data;
   const fullname = firstname + ' ' + lastname;
   const bcrypt = require('bcrypt');
-  const createddate = new Date().toISOString().split('T')[0];
+  let date = new Date();
+  const offset = date.getTimezoneOffset();
+  date = new Date(date.getTime() - (offset*60*1000));
+  const createddate = date.toISOString().split('T')[0];
   const hashedPassword = await bcrypt.hash(password, 10);
-  console.log('fullname: ' + fullname);
-  console.log('validatedFields.data: ' + validatedFields.data);
+  //const id = "410544b2-4001-4271-9855-fec4b6a6442a";
+  const id = Date.now().toString(36) + Math.floor(Math.pow(10, 12) + Math.random() * 9*Math.pow(10, 12)).toString(36);
   // Insert data into the database
   try {
     await sql`
