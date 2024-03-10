@@ -159,11 +159,11 @@ export type UserState = {
     password?: string[];
   };
   message?: string | null;
+  success?: string | null;
 };
 
 export async function createUser(prevState: UserState, formData: FormData) {
   // Validate form using Zod
-  console.log('Entered to create user');
   const validatedFields = CreateUser.safeParse({
     firstname: formData.get('firstname'),
     lastname: formData.get('lastname'),
@@ -190,22 +190,23 @@ export async function createUser(prevState: UserState, formData: FormData) {
   const createddate = date.toISOString().split('T')[0];
   const hashedPassword = await bcrypt.hash(password, 10);
   //const id = "410544b2-4001-4271-9855-fec4b6a6442a";
-  const id = Date.now().toString(36) + Math.floor(Math.pow(10, 12) + Math.random() * 9*Math.pow(10, 12)).toString(36);
+  //const id = Date.now().toString(36) + Math.floor(Math.pow(10, 12) + Math.random() * 9*Math.pow(10, 12)).toString(36);
+  console.log(createddate);
   // Insert data into the database
   try {
     await sql`
     INSERT INTO users (firstname, lastname, name, profile, email, password, createddate)
     VALUES (${firstname}, ${lastname}, ${fullname}, ${profile}, ${email}, ${hashedPassword}, ${createddate})
-    ON CONFLICT (id) DO NOTHING;
+    
     `;
   } catch (error) {
     // If a database error occurs, return a more specific error.
+    console.log('already user');
     return {
       message: 'Database Error: Failed to Create User.',
     };
   }
-  console.log('db shoulve created data: ');
   // Revalidate the cache for the user page and redirect the user.
   revalidatePath('/createuser');
-  redirect('/login');
+  return { success: 'User created successfully, navigate to the login page and login'};
 }

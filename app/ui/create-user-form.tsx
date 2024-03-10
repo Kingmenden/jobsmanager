@@ -1,22 +1,21 @@
 'use client';
 
-import React, { useState, ChangeEvent, FormEvent } from 'react';
+import React, { useState, ChangeEvent } from 'react';
 import { lusitana } from '@/app/ui/fonts';
 import {
   AtSymbolIcon,
   KeyIcon,
   Bars3Icon,
   ExclamationCircleIcon,
+  CheckCircleIcon,
 } from '@heroicons/react/24/outline';
 import { ArrowRightIcon } from '@heroicons/react/20/solid';
 import { Button } from './button';
 import { useFormState, useFormStatus } from 'react-dom';
 import { createUser } from '@/app/lib/actions';
 import Link from 'next/link';
-//import ProfileDropdown from './profiledropdown';
 
 export default function CreateUserForm() {
-  //this.state = {value: ''};
 
   // State to manage the selected value of the Picklist
   const [selectedOption, setSelectedOption] = useState('');
@@ -25,13 +24,6 @@ export default function CreateUserForm() {
   const handlePicklistChange = (event : ChangeEvent<HTMLSelectElement>) => {
     setSelectedOption(event.target.value);
   };
-  
-  // Form submit handler
-  /*const handleSubmit = (event) => {
-    event.preventDefault();
-    // Handle form submission with the selectedOption value
-    console.log('Selected Option:', selectedOption);
-  };*/
   // Define Picklist options
   const picklistOptions = [
     { value: 'admin', label: 'Admin' },
@@ -44,7 +36,6 @@ export default function CreateUserForm() {
   ];
   const initialState = { message: null, errors: {} };
   const [state, dispatch] = useFormState(createUser, initialState);
-  //const [selected, setSelected] = React.useState<string | null>(null);
   return (
     <form action={dispatch} className="space-y-3">
       <div className="flex-1 rounded-lg bg-gray-50 px-6 pb-4 pt-8">
@@ -178,13 +169,39 @@ export default function CreateUserForm() {
         </div>
         <div className="mt-6 flex justify-end gap-4">
         <Link
-          href="/login"
-          className="flex h-10 items-center rounded-lg bg-gray-100 px-4 text-sm font-medium text-gray-600 transition-colors hover:bg-gray-200"
-        >
+            href="/login"
+            className="flex h-10 items-center rounded-lg bg-gray-100 px-4 text-sm font-medium text-gray-600 transition-colors hover:bg-gray-200"
+          >
           Cancel
-        </Link>
-        <Button type="submit">Submit</Button>
-      </div>
+          </Link>
+          <Button type="submit">Submit</Button>
+        </div>
+        <div className="flex h-8 items-end space-x-1">
+          <div
+            className="flex h-8 items-end space-x-1"
+            aria-live="polite"
+            aria-atomic="true"
+          >
+            {state.message && (
+              <>
+              <ExclamationCircleIcon className="h-5 w-5 text-red-500" />
+              <p className="text-sm text-red-500">{state.message.toString()}</p>
+              </>
+            )}
+          </div>
+          <div
+            className="flex h-8 items-end space-x-1"
+            aria-live="polite"
+            aria-atomic="true"
+          >
+            {state.success && (
+              <>
+              <CheckCircleIcon className="h-5 w-5 text-green-500" />
+              <p className="text-sm text-red-500">{state.message}</p>
+              </>
+            )}
+          </div>
+        </div>
       </div>
     </form>
   );
