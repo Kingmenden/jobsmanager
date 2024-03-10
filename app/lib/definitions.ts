@@ -7,7 +7,7 @@ export type User = {
   firstname: string;
   lastname: string;
   name: string;
-  profile: 'admin' | 'subcontractor' | 'customer' | 'builder' | 'vendor' | 'employee';
+  profile: 'admin' | 'subcontractor' | 'customer' | 'builder' | 'vendor' | 'employee' | 'manager';
   email: string;
   password: string;
   createddate: Date;

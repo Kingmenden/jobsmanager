@@ -1,9 +1,11 @@
 'use client';
 
+import React, { useState, ChangeEvent, FormEvent } from 'react';
 import { lusitana } from '@/app/ui/fonts';
 import {
   AtSymbolIcon,
   KeyIcon,
+  Bars3Icon,
   ExclamationCircleIcon,
 } from '@heroicons/react/24/outline';
 import { ArrowRightIcon } from '@heroicons/react/20/solid';
@@ -11,11 +13,40 @@ import { Button } from './button';
 import { useFormState, useFormStatus } from 'react-dom';
 import { createUser } from '@/app/lib/actions';
 import Link from 'next/link';
+//import ProfileDropdown from './profiledropdown';
 
 export default function CreateUserForm() {
+  //this.state = {value: ''};
 
+  // State to manage the selected value of the Picklist
+  const [selectedOption, setSelectedOption] = useState('');
+
+  // Event handler for Picklist change
+  const handlePicklistChange = (event : ChangeEvent<HTMLSelectElement>) => {
+    setSelectedOption(event.target.value);
+  };
+  
+  // Form submit handler
+  /*const handleSubmit = (event) => {
+    event.preventDefault();
+    // Handle form submission with the selectedOption value
+    console.log('Selected Option:', selectedOption);
+  };*/
+  // Define Picklist options
+  const picklistOptions = [
+    { value: 'admin', label: 'Admin' },
+    { value: 'subcontractor', label: 'Sub Contractor' },
+    { value: 'customer', label: 'Customer' },
+    { value: 'builder', label: 'Builder' },
+    { value: 'vendor', label: 'Vendor' },
+    { value: 'employee', label: 'Employee' },
+    { value: 'manager', label: 'Manager'},
+  ];
+  const initialState = { message: null, errors: {} };
+  const [state, dispatch] = useFormState(createUser, initialState);
+  //const [selected, setSelected] = React.useState<string | null>(null);
   return (
-    <form action={createUser} className="space-y-3">
+    <form action={dispatch} className="space-y-3">
       <div className="flex-1 rounded-lg bg-gray-50 px-6 pb-4 pt-8">
         <h1 className={`${lusitana.className} mb-3 text-2xl`}>
           Please Enter Your Details.
@@ -37,7 +68,6 @@ export default function CreateUserForm() {
                 placeholder="Enter your First Name"
                 required
               />
-              <AtSymbolIcon className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500 peer-focus:text-gray-900" />
             </div>
           </div>
           <div>
@@ -56,7 +86,6 @@ export default function CreateUserForm() {
                 placeholder="Enter your Last Name"
                 required
               />
-              <AtSymbolIcon className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500 peer-focus:text-gray-900" />
             </div>
           </div>
           <div>
@@ -67,15 +96,23 @@ export default function CreateUserForm() {
               Profile
             </label>
             <div className="relative">
-              <input
+              <select
                 className="peer block w-full rounded-md border border-gray-200 py-[9px] pl-10 text-sm outline-2 placeholder:text-gray-500"
+                placeholder="Select your profile"
                 id="profile"
-                type="profile"
                 name="profile"
-                placeholder="Select your Profile type"
+                value={selectedOption}
+                typeof="profile"
+                onChange={handlePicklistChange}
                 required
-              />
-              <AtSymbolIcon className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500 peer-focus:text-gray-900" />
+                >
+                {picklistOptions.map((option) => (
+                <option key={option.value} value={option.value}>
+                  {option.label}
+                </option>
+                ))}
+              </select>
+              <Bars3Icon className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500 peer-focus:text-gray-900" />
             </div>
           </div>
           <div>
@@ -85,7 +122,7 @@ export default function CreateUserForm() {
             >
               Email
             </label>
-            <div className="relative">
+            <div className="relative z-index: -1">
               <input
                 className="peer block w-full rounded-md border border-gray-200 py-[9px] pl-10 text-sm outline-2 placeholder:text-gray-500"
                 id="email"

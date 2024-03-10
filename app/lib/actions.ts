@@ -23,7 +23,7 @@ const UserSchema = z.object({
   firstname: z.string(),
   lastname: z.string(),
   email: z.string(),
-  profile: z.enum(['admin', 'subcontractor', 'customer', 'builder', 'vendor', 'employee'], {
+  profile: z.enum(['admin', 'subcontractor', 'customer', 'builder', 'vendor', 'employee', 'manager'], {
     invalid_type_error: 'Please select a profile.',
   }),
   password: z.string(),
@@ -149,8 +149,21 @@ export async function authenticate(
 
 const CreateUser = UserSchema.omit({ });
 
-export async function createUser(formData: FormData) {
+// This is temporary until @types/react-dom is updated
+export type UserState = {
+  errors?: {
+    firstname?: string[];
+    lastname?: string[];
+    profile?: string[];
+    email?: string[];
+    password?: string[];
+  };
+  message?: string | null;
+};
+
+export async function createUser(prevState: UserState, formData: FormData) {
   // Validate form using Zod
+  console.log('Entered to create user');
   const validatedFields = CreateUser.safeParse({
     firstname: formData.get('firstname'),
     lastname: formData.get('lastname'),
@@ -173,7 +186,8 @@ export async function createUser(formData: FormData) {
   const bcrypt = require('bcrypt');
   const createddate = new Date().toISOString().split('T')[0];
   const hashedPassword = await bcrypt.hash(password, 10);
-
+  console.log('fullname: ' + fullname);
+  console.log('validatedFields.data: ' + validatedFields.data);
   // Insert data into the database
   try {
     await sql`
@@ -187,7 +201,7 @@ export async function createUser(formData: FormData) {
       message: 'Database Error: Failed to Create User.',
     };
   }
-
+  console.log('db shoulve created data: ');
   // Revalidate the cache for the user page and redirect the user.
   revalidatePath('/createuser');
   redirect('/login');
